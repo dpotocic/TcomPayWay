@@ -10,6 +10,7 @@ use Locastic\TcomPayWay\Model\PaymentInterface;
  * This model is used for preparing standard model of payment (athorize-form)
  *
  * Class Payment
+ *
  * @package Locastic\TcomPayWay\AuthorizeForm\Model
  */
 class Payment extends BasePayment implements PaymentInterface
@@ -20,13 +21,13 @@ class Payment extends BasePayment implements PaymentInterface
     private $pgwDisableInstallments;
 
     /**
-     * @param string $pgwShopId
-     * @param string $secretKey
-     * @param string $pgwOrderId
-     * @param string $pgwAmount
-     * @param string $pgwAuthorizationType
-     * @param string $pgwSuccessUrl
-     * @param string $pgwFailureUrl
+     * @param string  $pgwShopId
+     * @param string  $secretKey
+     * @param string  $pgwOrderId
+     * @param string  $pgwAmount
+     * @param string  $pgwAuthorizationType
+     * @param string  $pgwSuccessUrl
+     * @param string  $pgwFailureUrl
      * @param boolean $sandbox
      */
     public function __construct(
@@ -87,25 +88,26 @@ class Payment extends BasePayment implements PaymentInterface
 
     /**
      * @param array $pgwResponse
-     *
      * @return bool
      */
     public function isPgwResponseValid($pgwResponse)
     {
-        $string = $this->getPgwShopId().$this->getSecretKey().$this->getPgwOrderId().$this->getSecretKey().$pgwResponse['Success'].$this->getSecretKey().$pgwResponse['ApprovalCode'].$this->getSecretKey();
-
-        return $pgwResponse['Signature'] == hash('sha512', $string);
+        return $pgwResponse['Signature'] == SignatureGenerator::generateOrderedSignatureFromArray(
+                $this->secretKey,
+                $this->pgwShopId,
+                $pgwResponse
+            );
     }
 
     /**
      * @param array $pgwResponse
-     *
      * @return bool
      */
     public function isPgwOrderedResponseValid($pgwResponse)
     {
-        return $pgwResponse['pgw_signature'] == SignatureGenerator::generateOrderedSignatureFromArray(
+        return $pgwResponse['Signature'] == SignatureGenerator::generateOrderedSignatureFromArray(
                 $this->secretKey,
+                $this->pgwShopId,
                 $pgwResponse
             );
     }

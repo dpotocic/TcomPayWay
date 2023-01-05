@@ -14,6 +14,10 @@
         {
             "name": "Antonio Peric-Mazar",
             "email": "antonio@locastic.com"
+        },
+        {
+            "name": "Dejan Potocic",
+            "email": "dejan.potocic@symmetria.hr"
         }
     ],
     "require": {

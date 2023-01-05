@@ -6,10 +6,13 @@ namespace Locastic\TcomPayWay\Model;
  * This model is used for preparing standard model of payment
  *
  * Class Payment
+ *
  * @package Locastic\TcomPayWay\Model
  */
 class Payment
 {
+    const fixedConversionRate = 7.53450;
+
     /**
      * @var int
      */
@@ -31,6 +34,11 @@ class Payment
      * @var int
      */
     protected $pgwAmount;
+
+    /**
+     * @var int $pgwAmountHRK
+     */
+    protected $pgwAmountHRK;
 
     /**
      * @var int
@@ -194,19 +202,27 @@ class Payment
     }
 
     /**
-     * @return float
-     */
-    public function getPgwAmountFloat()
-    {
-        return number_format($this->pgwAmount / 100, 2, ',', '');
-    }
-
-    /**
      * @param int $pgwAmount
      */
     public function setPgwAmount($pgwAmount)
     {
         $this->pgwAmount = $pgwAmount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPgwAmountHRK()
+    {
+        return $this->pgwAmountHRK;
+    }
+
+    /**
+     * @param int $pgwAmountHRK
+     */
+    public function setPgwAmountHRK($pgwAmountHRK)
+    {
+        $this->pgwAmountHRK = $pgwAmountHRK;
     }
 
     /**
